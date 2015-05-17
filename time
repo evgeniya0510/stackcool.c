@@ -1,0 +1,210 @@
+#include <stdio.h>
+#include <malloc.h>
+#include <omp.h>
+#include <stdlib.h>
+typedef unsigned int unit32_t;
+
+FILE *file;
+double start, stop, t_bubble, t_shell, t_fast, t_qsort;
+
+int i = 0;
+int k,n,m,d,h;
+int bubble (unit32_t *mas_1)
+{
+ for (m = 0 ;m < n; m++)
+	{
+ for(i = 0;i < n; i++)
+		{
+ if (mas_1[i] > mas_1[i+1])
+			{
+ k = mas_1[i];
+ mas_1[i] = mas_1[i+1];
+ mas_1[i+1] = k;
+			}
+		}
+	}
+ return 0;
+}
+
+
+int shell(unit32_t *A, int N)
+{
+ int p,j,k;
+ int t;
+ for(k = N/2; k > 0; k /=2)
+ for(p = k; p < N; p++)
+	{
+ t = A[p];
+ for(j = p; j>=k; j-=k)
+	{
+ if(t < A[j-k])
+ A[j] = A[j-k];
+ else
+ break;
+	}
+ A[j] = t;
+	}
+ return *A;
+}
+
+void fast(unit32_t *ar, int L, int R){
+ int i, j, x, buf;
+ x = ar[(L+R)/2];
+ i = L;
+ j = R;
+ do
+    {
+ while(ar[i]<x)
+ i++;
+ while(ar[j]>x)
+ j--;
+ if(i<=j)
+		{
+ buf = ar[i];
+ ar[i] = ar[j];
+ ar[j] = buf;
+ i++;
+ j--;
+        }
+    }
+ while(i<=j);
+ 
+ if(j>L)
+ fast(ar, L, j);
+ if(i<R)
+ fast(ar, i, R);
+    }
+ 
+ int compare (const void * a, const void * b) 
+{ 
+ return ( *(unit32_t*)a - *(unit32_t*)b ); 
+}
+ unit32_t* mas;
+ unit32_t* z;
+int main()
+{
+	
+ printf("Vvedite razmer massiva dlya sortirovki : ");
+ scanf_s("%i", &n);
+ mas = (unit32_t*) malloc(n*sizeof(unit32_t));
+ z = (unit32_t*) malloc(n*sizeof(unit32_t));
+ for(i = 0; i <= n ; i++)
+    {
+ mas[i] = rand();
+ z[i] = mas[i];
+		
+    }
+	
+ printf("Massiv do sortirovki \n");
+ for (i = 0; i < n ; i++)
+	{
+ printf("%i ", mas[i]);
+		
+	}
+ printf("\n");
+	
+
+ start = omp_get_wtime();
+ bubble (mas);
+ stop = omp_get_wtime();
+ t_bubble = stop - start;
+	
+ printf("Massiv posle sortirovki bubble \n");
+ for (i = 0; i < n; i++)
+	{
+ printf("%i ", mas[i]);
+		
+	}
+ printf("\n");
+ printf("Vremya = %f\n ", t_bubble );
+ printf("\n=================================\n");
+ for(i = 0; i < n; i++)
+    {
+ mas[i] = z[i];
+    }
+
+ printf("Massiv do sortirovki \n");
+ for (i = 0; i < n ; i++)
+	{
+ printf("%i ", mas[i]);
+		
+	}
+ printf("\n");
+ start = omp_get_wtime();
+ shell(mas, n);
+ stop = omp_get_wtime();
+ t_shell = stop - start;
+	
+ printf("Massiv posle sortirovki shell \n");
+ for (i = 0; i < n; i++)
+	{
+ printf("%i ", mas[i]);
+		
+	}
+ printf("\n");
+ printf("Vremya = %f\n ",t_shell);
+ printf("\n=================================\n");
+
+ for(i = 0; i < n; i++)
+    {
+ mas[i] = z[i];
+    }
+
+ printf("Massiv do sortirovki \n");
+ for (i = 0; i < n ; i++)
+	{
+ printf("%i ", mas[i]);
+		
+	}
+ printf("\n");
+ start = omp_get_wtime();
+ fast(mas , 0, n - 1);
+ stop = omp_get_wtime();
+ t_fast = stop - start;
+
+ printf("Massiv posle sortirovki fast \n");
+ for (i = 0; i < n; i++)
+	{
+ printf("%i ", mas[i]);
+		
+	}
+ printf("\n");
+ printf("Vremya = %f\n ",t_fast);
+ printf("\n=================================\n");
+
+ for(i = 0; i < n; i++)
+    {
+ mas[i] = z[i];
+    }
+
+ printf("Massiv do sortirovki \n");
+ for (i = 0; i < n ; i++)
+	{
+ printf("%i ", mas[i]);
+		
+	}
+ printf("\n");
+ start = omp_get_wtime();
+ qsort (mas, n, sizeof(unit32_t), compare);
+ stop = omp_get_wtime();
+ t_qsort = stop - start;
+	
+
+ printf("Massiv posle sortirovki qsort \n");
+ for (i = 0; i < n; i++)
+	{
+ printf("%i ", mas[i]);
+		
+	}
+ printf("\n");
+ printf("Vremya = %f\n " , t_qsort);
+ printf("\n=================================\n");
+	
+	
+ file = fopen("D:/time.csv", "w+t");
+ fprintf(file, "%f\n%f\n%f\n%f\n" , t_bubble, t_shell, t_fast, t_qsort);
+ fclose(file);
+    
+ return 0;
+
+}
