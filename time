@@ -5,27 +5,32 @@
 typedef unsigned int unit32_t;
 
 FILE *file;
+ unit32_t* mas;
+ unit32_t* z; 
+ unit32_t* mas_1;
+ unit32_t* mas_2;
+ unit32_t* mas_3;
+ unit32_t* mas_4;
 double start, stop, t_bubble, t_shell, t_fast, t_qsort;
 int i, j;
 int i = 0;
 int k,n,m,d,h;
-int bubble (unit32_t *mas_1)
+int bubble (unit32_t *I)
 {
- for (m = 0 ;m < n; m++)
+ for (m = 0 ;m < n-1; m++)
+ {
+	for(i = 0;i < n-1; i++)
 	{
- for(i = 0;i < n; i++)
+		if (I[i] > I[i+1])
 		{
- if (mas_1[i] > mas_1[i+1])
-			{
- k = mas_1[i];
- mas_1[i] = mas_1[i+1];
- mas_1[i+1] = k;
-			}
+			 k = I[i];
+			 I[i] = I[i+1];
+			 I[i+1] = k;
 		}
 	}
+}
  return 0;
 }
-
 
 int shell(unit32_t *A, int N)
 {
@@ -79,101 +84,115 @@ void fast(unit32_t *ar, int L, int R){
 { 
  return ( *(unit32_t*)a - *(unit32_t*)b ); 
 }
- unit32_t* mas;
- unit32_t* z;
+  
+ int Proverka(void)
+ {
+  for(i=0;i<n;i++)
+	 {
+		if(mas_1[i] = mas_2[i] = mas_3[i] = mas_4[i])
+		{
+			j = j + 0;
+		}
+		else
+		{
+			j++;
+			
+		}
+	}
+  return j;
+ }
+
+
 int main()
 {
+	 printf("Vvedite razmer massiva dlya sortirovki : ");
+	 scanf_s("%i", &n);
+	 mas = (unit32_t*) malloc(n*sizeof(unit32_t));
+	 z = (unit32_t*) malloc(n*sizeof(unit32_t));
+	 mas_1 = (unit32_t*) malloc(n*sizeof(unit32_t));
+	 mas_2 = (unit32_t*) malloc(n*sizeof(unit32_t));
+	 mas_3 = (unit32_t*) malloc(n*sizeof(unit32_t));
+	 mas_4 = (unit32_t*) malloc(n*sizeof(unit32_t));
+
+	 for(i = 0; i <= n ; i++)
+	 {
+		 mas[i] = rand();
+		 z[i] = mas[i];
+	 }
 	
+	 printf("\n");
 	
- printf("Vvedite razmer massiva dlya sortirovki : ");
- scanf_s("%i", &n);
- mas = (unit32_t*) malloc(n*sizeof(unit32_t));
- z = (unit32_t*) malloc(n*sizeof(unit32_t));
- for(i = 0; i <= n ; i++)
-    {
- mas[i] = rand();
- z[i] = mas[i];
-		
-    }
+	 start = omp_get_wtime();
+	 bubble (mas);
+	 stop = omp_get_wtime();
+	 t_bubble = stop - start;
 	
  
- printf("\n");
-	
-
- start = omp_get_wtime();
- //bubble (mas);
- stop = omp_get_wtime();
- t_bubble = stop - start;
-	
- 
- printf("\n");
- printf("Vremya bubble = %f\n ", t_bubble );
- printf("\n=================================\n");
- for(i = 0; i < n; i++)
-    {
- mas[i] = z[i];
-    }
-
- 
- printf("\n");
- start = omp_get_wtime();
- shell(mas, n);
- stop = omp_get_wtime();
- t_shell = stop - start;
-	
-
- printf("\n");
- printf("Vremya = shell %f\n ",t_shell);
- printf("\n=================================\n");
-
- for(i = 0; i < n; i++)
-    {
- mas[i] = z[i];
-    }
-
- 
- printf("\n");
- start = omp_get_wtime();
- fast(mas , 0, n - 1);
- stop = omp_get_wtime();
- t_fast = stop - start;
+	 printf("\n");
+	 printf("Vremya bubble = %f\n ", t_bubble );
+	 printf("\n=================================\n");
 
 
- printf("\n");
- printf("Vremya fast = %f\n ",t_fast);
- printf("\n=================================\n");
-
- for(i = 0; i < n; i++)
-    {
+	 for(i = 0; i < n; i++)
+	 {
+		mas_1[i] = mas[i];
 		mas[i] = z[i];
-    }
-
+	 }
  
- printf("\n");
- start = omp_get_wtime();
- qsort (z, n, sizeof(unit32_t), compare);
- stop = omp_get_wtime();
- t_qsort = stop - start;
-
-
+	 printf("\n");
+	 start = omp_get_wtime();
+	 shell(mas, n);
+	 stop = omp_get_wtime();
+	 t_shell = stop - start;
 	
 
+	 printf("\n");
+	 printf("Vremya = shell %f\n ",t_shell);
+	 printf("\n=================================\n");
 
- printf("\n");
- printf("Vremya = qsort %f\n " , t_qsort);
- printf("\n=================================\n");
+	 for(i = 0; i < n; i++)
+	 {
+		mas_2[i] = mas[i];
+		mas[i] = z[i];
+	 }
+
+	 printf("\n");
+	 start = omp_get_wtime();
+	 fast(mas , 0, n - 1);
+	 stop = omp_get_wtime();
+	 t_fast = stop - start;
+
+
+	 printf("\n");
+	 printf("Vremya fast = %f\n ",t_fast);
+	 printf("\n=================================\n");
+
+	 for(i = 0; i < n; i++)
+	 {
+		mas_3[i] = mas[i];
+		mas[i] = z[i];
+	 }
+
+	 printf("\n");
+	 start = omp_get_wtime();
+	 qsort (mas, n, sizeof(unit32_t), compare);
+	 stop = omp_get_wtime();
+	 t_qsort = stop - start;
+ 
+	 for(i = 0; i < n; i++)
+	 {
+		mas_4[i] = mas[i];
+	 }
+
+	 printf("\n");
+	 printf("Vremya = qsort %f\n " , t_qsort);
+	 printf("\n=================================\n");
+	 printf("Nesovpadeniy: %i\n", Proverka());
 	
-	
- file = fopen("time.csv", "w+t");
- fprintf(file, "%f\n%f\n%f\n" , t_shell, t_fast, t_qsort);
- fclose(file);
-      for (i=0,j=0; i<n , j<n; i++, j++)
-  {
-	if (mas[i] != z[j])
-	{
-		print("ooooo");
-	}
-  }
+	 file = fopen("time.csv", "w+t");
+	 fprintf(file, "%f\n%f\n%f\n" , t_shell, t_fast, t_qsort);
+	 fclose(file);
+
  return 0;
 
 }
