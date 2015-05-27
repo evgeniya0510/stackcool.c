@@ -5,22 +5,33 @@
 
 int main()
 {
-	int *matr, i, n;
-	printf("Vvedite razmer massiva dlya sortirovki bubble: ");
-    scanf_s("%i", &n);
-    matr = (int*) malloc(n*sizeof(int));
-	for(i = 0; i < n; i++)
+	int  i;
+	int *matr;
+
+	int *n= (int *) malloc(sizeof(int));
+	printf("Vvedite razmer massiva ");
+    scanf_s("%i", &(*n));
+
+    matr = (int*) malloc((*n)*sizeof(int));
+	for(i = 0; i < *n; i++)
     {
-		printf("mas_1[%d] = ", i);
+		printf("Tabl[%d] = ", i);
 		scanf_s("%i", &matr[i]);
     }
-	for(i = 0; i < n; i++)
+	for(i = 0; i < *n; i++)
 	{
 		matr[i] = matr[i] * matr[i];
 	}
-	printf("Rezult: ");
-	for (i = 0; i < n; i++)
+	printf("Rezult:\n ");
+
+	for( i = 0; i < *n ; i++)
 	{
-		printf("%i ", matr[i]);
+		printf("%d\t%d\t\n", i, matr[i]);
 	}
+
+    
+	free(matr);
+	free(n);        
+
+	return 0;
 }
