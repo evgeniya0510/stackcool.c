@@ -1,0 +1,50 @@
+#include <stdio.h>
+
+#include <malloc.h>
+
+
+int main()
+{
+	int i;
+	typedef struct
+	{
+		int Number;
+		char Name[20];
+		char Surname[20];
+		int Score;
+
+	}group;    
+
+	int *n = (int *) malloc(sizeof(int));
+	group *mas;
+
+	printf("Enter number of people: ");
+    scanf_s("%i", &(*n));
+
+	mas = (group *) malloc((*n) * sizeof(group));
+
+	for(i = 0; i < *n; i++)
+	{
+		mas[i].Number = i+1;
+		printf("Name :");
+		scanf("%s", &mas[i].Name);
+		printf("Surname :");
+		scanf("%s", &mas[i].Surname);
+		printf("Score :");
+		scanf("%i", &mas[i].Score);
+
+	} 
+
+	printf("Number\tName\tSurname\tScore\n");
+	for(i = 0; i < *n; i++)
+	{
+		printf("%i\t%s\t%s\t%i\n", mas[i].Number, mas[i].Name, mas[i].Surname ,  mas[i].Score);
+	}
+
+    
+	free(mas);
+	free(n);        
+    
+
+	return 0;
+}
