@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <malloc.h>
+#include <string.h>
+int main(void)
+{
+	int n, i;
+	char *TEXT;
+	//scanf_s("%i", &n);
+	TEXT = (char *)malloc (sizeof(char));
+	for (i = 0; i < strlen(TEXT); i++)
+	{
+		scanf_s("%s", &(*TEXT));
+	}
+	for (i = 0; i < strlen(TEXT); i ++)
+	{
+		if (TEXT[i] == 'e' || TEXT[i] == 'y' || TEXT[i] == 'u' || TEXT[i] == 'i' || TEXT[i] == 'o' || TEXT[i] == 'a')
+		{
+			printf("%c", TEXT[i]);
+		}
+		if (TEXT[i] == ' ')
+		{
+			break;
+		}
+	}
+	free (TEXT);
+	return 0;
+}
