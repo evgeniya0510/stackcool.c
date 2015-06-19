@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+typedef double (*FUNCP)(double, double, double, double);
+
+double Parabola(double x, double a, double b, double c);
+double Gyperbola(double x, double a, double nil1, double nil2);
+
+/* вычисляет значения функций из массива */
+main()
+{
+	FUNCP funcs[10];
+	int i;
+
+	funcs[0] = Parabola;
+	funcs[1] = Gyperbola;
+
+	for (i = 0; i < 2; i++)
+		printf("%10.3f\n", funcs[i](25, 11, -3, 7));
+	return 0;
+}
+
+/* Parabola: вычисляет значение параболы */
+double Parabola(double x, double a, double b, double c)
+{
+	return a*x*x + b*x + c;
+}
+
+/* Gyperbola: вычисляет значение гиперболы */
+double Gyperbola(double x, double a, double nil1, double nil2)
+{
+	return a*1/x;
+}
